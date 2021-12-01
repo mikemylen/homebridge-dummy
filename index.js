@@ -1,5 +1,6 @@
 "use strict";
 
+var PythonShell = require('python-shell');
 var Service, Characteristic, HomebridgeAPI;
 
 module.exports = function(homebridge) {
@@ -7,7 +8,7 @@ module.exports = function(homebridge) {
 	Service = homebridge.hap.Service;
 	Characteristic = homebridge.hap.Characteristic;
 	HomebridgeAPI = homebridge;
-	homebridge.registerAccessory("homebridge-dummy", "DummyPythonSwitch", DummyPythonSwitch);
+	homebridge.registerAccessory("@mikemylen/homebridge-dummy", "DummyPythonSwitch", DummyPythonSwitch);
 }
 
 function DummyPythonSwitch(log, config) {
@@ -18,6 +19,11 @@ function DummyPythonSwitch(log, config) {
 	this.time = config.time ? config.time : 1000;		
 	this.resettable = config.resettable;
 	this.timer = null;
+	this.pythonScriptPath = config.pythonScriptPath;
+	this.pythonScriptName = config.pythonScriptName;
+	this.pythonScriptHost = config.pythonScriptHost;
+	this.pythonScriptAppKey = config.pythonScriptAppKey;
+
 	this._service = new Service.Switch(this.name);
 	
 	this.cacheDirectory = HomebridgeAPI.user.persistPath();
@@ -44,8 +50,28 @@ DummyPythonSwitch.prototype.getServices = function() {
 }
 
 DummyPythonSwitch.prototype._setOn = function(on, callback) {
-
 	this.log("Setting switch to " + on);
+	
+	if (on) {
+    	this.log("Calling python script")
+    	var options = {};
+    	options.scriptPath = this.pythonScriptPath;
+    	options.args = [this.pythonScriptHost, this.pythonScriptAppKey]
+    
+    	PythonShell.run(this.pythonScriptName, options, function (err, results) {
+    			if (err) {
+    					this.log("Script Error", options.scriptPath, options.args, err);
+    					if(callback) callback(err);
+    			} else {
+    					// results is an array consisting of messages collected during execution
+    					this.log('%j', results);
+    					//this.outputState = value;
+    
+    					//this.log("outputState is now %s", this.outputState);
+    					//if(callback) callback(null); // success
+    			}
+    	}.bind(this));
+	}
 
 	if (on && !this.reverse && !this.stateful) {
 		if (this.resettable) {
@@ -60,7 +86,6 @@ DummyPythonSwitch.prototype._setOn = function(on, callback) {
 		}
 		this.timer = setTimeout(function() {
 			this._service.setCharacteristic(Characteristic.On, true);
-			//do something interesting here.
 		}.bind(this), this.time);
 	}
 	

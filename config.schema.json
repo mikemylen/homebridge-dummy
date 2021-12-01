@@ -33,6 +33,26 @@
                 "type": "boolean",
                 "default": false,
                 "description": "The timer will reset each time the switch is turned on. "
+            },
+            "pythonScriptPath": {
+                "title": "pythonScriptPath",
+                "type": "string",
+                "required": true
+            },
+            "pythonScriptName": {
+                "title": "pythonScriptName",
+                "type": "string",
+                "required": true
+            },
+            "pythonScriptHost": {
+                "title": "pythonScriptHost",
+                "type": "string",
+                "required": true
+            },
+            "pythonScriptAppKey": {
+                "title": "pythonScriptAppKey",
+                "type": "string",
+                "required": true
             }
         }
     }
