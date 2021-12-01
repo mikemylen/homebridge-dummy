@@ -1,23 +1,24 @@
 {
-  "name": "homebridge-dummy",
+  "name": "@mikemylen/homebridge-dummy",
   "version": "0.5.0",
-  "description": "Dummy switches for Homebridge: https://github.com/nfarina/homebridge",
+  "description": "Dummy python switches for Homebridge: https://github.com/mikemylen/homebridge-dummy",
   "license": "ISC",
   "keywords": [
     "homebridge-plugin"
   ],
   "repository": {
     "type": "git",
-    "url": "git://github.com/nfarina/homebridge-dummy.git"
+    "url": "https://github.com/mikemylen/homebridge-dummy"
   },
   "bugs": {
-    "url": "http://github.com/nfarina/homebridge-dummy/issues"
+    "url": "https://github.com/mikemylen/homebridge-dummy/issues"
   },
   "engines": {
     "node": ">=0.12.0",
     "homebridge": ">=0.2.0"
   },
   "dependencies": {
-    "node-persist": "^2.1.0"
+    "node-persist": "^2.1.0",
+    "python-shell": "^0.4.0"
   }
 }
